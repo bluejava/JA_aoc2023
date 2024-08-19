@@ -19,16 +19,13 @@ lines.forEach(line => {
         draw.split(', ').forEach(value_and_color => {
             switch (/(red|green|blue)/.exec(value_and_color)[1]) {
                 case 'red':
-                    const red_count = parseInt(color_counter.exec(value_and_color)[1]);
-                    group.red = (red_count > group.red) ? red_count : group.red;
+                    group.red = Math.max(group.red, parseInt(color_counter.exec(value_and_color)[1]));
                     break;
                 case 'green':
-                    const green_count = parseInt(color_counter.exec(value_and_color)[1]);
-                    group.green = (green_count > group.green) ? green_count : group.green;
+                    group.green = Math.max(group.green, parseInt(color_counter.exec(value_and_color)[1]));
                     break;
                 case 'blue':
-                    const blue_count = parseInt(color_counter.exec(value_and_color)[1]);
-                    group.blue = (blue_count > group.blue) ? blue_count : group.blue;
+                    group.blue = Math.max(group.blue, parseInt(color_counter.exec(value_and_color)[1]));
                     break;
             }                    
         });
