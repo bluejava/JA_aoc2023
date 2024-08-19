@@ -12,9 +12,7 @@ const convert_name_to_number = {
     'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5, 'six': 6, 'seven': 7, 'eight': 8, 'nine': 9,
 };
 
-let sum = 0;
-
-lines.forEach(line => {
+let sum = lines.reduce((running_total, line) => {
     const first_regex = /(\d|one|two|three|four|five|six|seven|eight|nine)/;
     let calibration_value = 10 * convert_name_to_number[first_regex.exec(line)[1]]; 
 
@@ -22,7 +20,7 @@ lines.forEach(line => {
     const last_regex = /(?=\d|one|two|three|four|five|six|seven|eight|nine).*(\d|one|two|three|four|five|six|seven|eight|nine).*$/;
     calibration_value += convert_name_to_number[last_regex.exec(line)[1]];
 
-    sum += calibration_value;
-});
+    return running_total + calibration_value;
+}, 0);
 
 console.log(sum);
