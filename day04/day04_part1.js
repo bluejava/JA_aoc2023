@@ -12,14 +12,15 @@ const fs = require('fs');
 let lines = fs.readFileSync(filename, 'utf-8').split(/\r?\n/).filter(l => l.length > 0);
 // pretty_print_object(lines);
 
-let score = 0;
-lines.forEach(line => {
-    let wins, nums;
-    [wins, nums] = line.split(':')[1].split('|').map(x => x.trim());
-    let winners = wins.split(/\s+/).map(x => parseInt(x));
-    let matching_numbers = nums.split(/\s+/).map(x => parseInt(x)).filter(x => winners.includes(x));
-    console.log(matching_numbers);
+function score_card(running_total, line){
+    const [wins, nums] = line.split(':')[1].split('|').map(x => x.trim());
+    let winners = wins.split(/\s+/).map(Number);
+    let matching_numbers = nums.split(/\s+/).map(Number).filter(x => winners.includes(x)); // basically, intersect the two "sets"
+    // console.log(matching_numbers);
     if (matching_numbers.length)
-        score += 2**(matching_numbers.length-1);
-});
+        return running_total + 2**(matching_numbers.length-1);
+    return running_total;
+}
+
+const score = lines.reduce(score_card, 0);
 console.log(score);
