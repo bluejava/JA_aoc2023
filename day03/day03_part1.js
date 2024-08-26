@@ -6,11 +6,62 @@ function pretty_print_object(s) {
 }
 
 // const filename = '/home/jay/source/aoc2023/day03/sample.txt';
-const filename = '/home/jay/source/aoc2023/day03/input.txt';
+// const filename = '/home/jay/source/aoc2023/day03/input.txt';
+const filename = './input-glenn.txt';
 
 const fs = require('fs');
 let lines = fs.readFileSync(filename, 'utf-8').split(/\r?\n/).filter(l => l.length > 0);
 // pretty_print_object(lines);
+
+/*
+    I'll use this module as a chance to push my preferred general approach - build many single-purpose functions
+    and then describe your solution in code as you would a recipe. This is highly readable and comprehensible and
+    results in functions that may be usable for part2 - or even other challenges. Its also easier to debug and test.
+
+    So in this case (as I mentioned in a previous day) I'd define a parse function that takes the line data and converts
+    to some data structure that is easier to work with:
+
+    const symbolsAndNumbersRE = /\d+|[^\.\w\d]/g
+    const isNumber = (value: string) => parseInt(value).toString() === value
+    const prop = (propName: string) => (ob: {[index: string]: any}) => ob[propName]
+
+    function parse(input: string): Data
+    {
+        const data: Data = { symbols: [], numbers: [] }
+
+        input
+            .split("\n")
+            .forEach((line, lineIndex) => {
+                for(let item of line.matchAll(symbolsAndNumbersRE))
+                {
+                    if(isNumber(item[0]))
+                        data.numbers.push({index: item.index!, value: parseInt(item[0]), lineIndex})
+                    else
+                        data.symbols.push({index: item.index!, symbol: item[0], lineIndex})
+                }
+            })
+
+        return data
+    }
+
+    Thats my parse function - which takes the lines from the input and returns symbols and numbers and stores
+    along with their line/column indices.
+
+    Then the main() function can simply be:
+
+    function main(inputFile: string): number[]
+    {
+    	const input = await readFile(inputFile, "utf-8")
+        const data = parse(input)
+
+       return data.numbers
+            .filter(numberOb => isPartNum(data.symbols, numberOb))
+            .map(prop("value"))
+            .sum()
+    }
+
+    Note how you can write unit tests for each of these single-purpose functions.
+*/
 
 // first, find every symbol and store all of the coordinates around it, so we can use them later
 let adjacent_coordinates = new Set();

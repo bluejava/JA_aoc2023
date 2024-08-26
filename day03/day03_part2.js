@@ -6,11 +6,39 @@ function pretty_print_object(s) {
 }
 
 // const filename = '/home/jay/source/aoc2023/day03/sample.txt';
-const filename = '/home/jay/source/aoc2023/day03/input.txt';
+// const filename = '/home/jay/source/aoc2023/day03/input.txt';
+const filename = './input-glenn.txt';
 
 const fs = require('fs');
 let lines = fs.readFileSync(filename, 'utf-8').split(/\r?\n/).filter(l => l.length > 0);
 // pretty_print_object(lines);
+
+/*
+    Looks like you were nearly able to re-use this next section from your part 1. It illustrates the point of
+    the benefits of constructing from many single-purpose functions. In this more complex function you had to
+    make some tweaks, and therefor had to re-write it all. After part 1 I pasted as a comment into part 1
+    part 2 is merely:
+
+	const p2 = data.symbols
+		.filter(s => s.symbol === "*" && (s.numbers?.length || 0) > 1)
+		.map(prop("numbers"))
+		.map(product)
+		.sum()
+
+    The only new function I needed was product:
+
+    const product = (ar: number[]) => ar.reduce((tot, cur) => tot * cur)
+
+    Oh, also to use sum() in a chain like that I had to define it on the Array prototype:
+    Array.prototype.sum = function(): number { return sum(this as number[]) }
+
+    You could also do it by defining a temporary variable to hold the array before summing, and then:
+    const p2 = sum(tempArray)
+
+    But as I've said, I try to avoid temporary varaibles and rather extend native objects like Array
+    (though some frown on that practice - and I agree for libraries or frameworks I am publishing for others
+    to use).
+*/
 
 // first, find every symbol and store all of the coordinates around it, so we can use them later
 let adjacent_coordinates = new Map();

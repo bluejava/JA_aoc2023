@@ -1,7 +1,10 @@
+// Other than the recommendations from part1 (which I didn't repeat here), I just noticed the repeated pattern
+// in the group counting that can be reduced by parameterizing the color property.
 "use strict";
 
 // const filename = '/home/jay/source/aoc2023/day02/sample.txt';
-const filename = '/home/jay/source/aoc2023/day02/input.txt';
+// const filename = '/home/jay/source/aoc2023/day02/input.txt';
+const filename = './input-glenn.txt'; // 78375
 
 const fs = require('fs');
 let lines = fs.readFileSync(filename, 'utf-8').split(/\r?\n/).filter(l => l.length > 0);
@@ -15,17 +18,20 @@ function score_line(running_total, line) {
     const color_counter = /(\d+)/; // type is RegExp
     for (let draw of line.split(': ')[1].split('; ')) {
         for (let value_and_color of draw.split(', ')) {
-            switch (/(red|green|blue)/.exec(value_and_color)[1]) {
-                case 'red':
-                    group.red = Math.max(group.red, parseInt(color_counter.exec(value_and_color)[1]));
-                    break;
-                case 'green':
-                    group.green = Math.max(group.green, parseInt(color_counter.exec(value_and_color)[1]));
-                    break;
-                case 'blue':
-                    group.blue = Math.max(group.blue, parseInt(color_counter.exec(value_and_color)[1]));
-                    break;
-            }                    
+
+            const color = /(red|green|blue)/.exec(value_and_color)[1]
+            group[color] = Math.max(group[color], parseInt(color_counter.exec(value_and_color)[1]));
+            // switch (/(red|green|blue)/.exec(value_and_color)[1]) {
+            //     case 'red':
+            //         group.red = Math.max(group.red, parseInt(color_counter.exec(value_and_color)[1]));
+            //         break;
+            //     case 'green':
+            //         group.green = Math.max(group.green, parseInt(color_counter.exec(value_and_color)[1]));
+            //         break;
+            //     case 'blue':
+            //         group.blue = Math.max(group.blue, parseInt(color_counter.exec(value_and_color)[1]));
+            //         break;
+            // }
         }
     }
 
